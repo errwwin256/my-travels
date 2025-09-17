@@ -1,0 +1,247 @@
+/* --- Tropical Beach Scene with Day-Night Cycle --- */
+.tropical-bg {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to top, #fef9c3 10%, #60a5fa 100%);
+  animation: skyCycle 40s ease-in-out infinite;
+}
+
+/* Sun / Moon */
+.tropical-bg::before {
+  content: "";
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle,
+    #fde047 40%,
+    #facc15 70%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: sunMoonCycle 40s ease-in-out infinite;
+  z-index: 1;
+}
+
+/* Sea */
+.tropical-bg::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 45%;
+  background: linear-gradient(to top, #0284c7, #38bdf8);
+  border-radius: 50% 50% 0 0;
+  animation: waveDrift 12s linear infinite;
+  z-index: 2;
+}
+
+/* Sand */
+.sand {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 18%;
+  background: #fcd34d;
+  z-index: 3;
+}
+
+/* --- Animations --- */
+
+/* Sky transitions: Day → Sunset → Night → Sunrise */
+@keyframes skyCycle {
+  0% {
+    background: linear-gradient(to top, #fef9c3 10%, #60a5fa 100%);
+  } /* Day */
+  25% {
+    background: linear-gradient(to top, #fdba74 20%, #fb923c 100%);
+  } /* Sunset */
+  50% {
+    background: linear-gradient(to top, #1e3a8a 30%, #0f172a 100%);
+  } /* Night */
+  75% {
+    background: linear-gradient(to top, #f472b6 20%, #facc15 100%);
+  } /* Sunrise */
+  100% {
+    background: linear-gradient(to top, #fef9c3 10%, #60a5fa 100%);
+  } /* Back to Day */
+}
+
+/* Sun turns into Moon and back */
+@keyframes sunMoonCycle {
+  0% {
+    background: radial-gradient(
+      circle,
+      #fde047 40%,
+      #facc15 70%,
+      transparent 100%
+    );
+    top: 15%;
+  }
+  25% {
+    background: radial-gradient(
+      circle,
+      #f97316 30%,
+      #fb923c 70%,
+      transparent 100%
+    );
+    top: 25%;
+  }
+  50% {
+    background: radial-gradient(
+      circle,
+      #e5e7eb 40%,
+      #94a3b8 70%,
+      transparent 100%
+    );
+    top: 20%;
+  } /* Moon */
+  75% {
+    background: radial-gradient(
+      circle,
+      #f472b6 30%,
+      #facc15 70%,
+      transparent 100%
+    );
+    top: 10%;
+  }
+  100% {
+    background: radial-gradient(
+      circle,
+      #fde047 40%,
+      #facc15 70%,
+      transparent 100%
+    );
+    top: 15%;
+  }
+}
+
+/* Waves moving sideways */
+@keyframes waveDrift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* --- Stars --- */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 2s infinite;
+}
+
+/* Random twinkling effect */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Control when stars appear (night only) */
+@keyframes starsVisibility {
+  0%,
+  25% {
+    opacity: 0;
+  } /* Day & Sunset */
+  50% {
+    opacity: 1;
+  } /* Night */
+  75%,
+  100% {
+    opacity: 0;
+  } /* Sunrise & Day again */
+}
+.stars {
+  animation: starsVisibility 40s linear infinite;
+}
+/* --- Moon Reflection on the Sea --- */
+.moon-reflection {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 60px;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 255, 255, 0.6) 20%,
+    transparent 80%
+  );
+  border-radius: 50%;
+  opacity: 0;
+  animation: reflectionTwinkle 3s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* Gentle shimmer */
+@keyframes reflectionTwinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateX(-50%) scaleX(1.1);
+  }
+}
+
+/* Sync reflection with night cycle */
+@keyframes reflectionVisibility {
+  0%,
+  25% {
+    opacity: 0;
+  } /* Day & Sunset */
+  50% {
+    opacity: 0.6;
+  } /* Night */
+  75%,
+  100% {
+    opacity: 0;
+  } /* Sunrise & Day again */
+}
+.moon-reflection {
+  animation: reflectionVisibility 40s linear infinite,
+    reflectionTwinkle 3s ease-in-out infinite;
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out forwards;
+}
